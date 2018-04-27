@@ -1,7 +1,7 @@
 # IKR
 IKR 2018 projekt, audio classification part
 
-Potrebne nainstalovat:
+External libs:
 ```
 pip3 install keras
 pip3 install tensorflow
@@ -15,16 +15,16 @@ Sources:
 - https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
 
       
-directory structure:
+Directory structure:
 ```
   .
   ├── eval
   │   ├── [evaluation data for clasification(could be mixed .png with wav)]
   ├── my_data
   │   ├── nontarget
-  │       ├── [coppied all nontarget wav files only]
+  │       ├── [coppied all nontarget wav files only (nontarget_train/dev dirs)]
   │   └── target
-  │       ├── [coppied all target wav files only]
+  │       ├── [coppied all target wav files only (nontarget_train/dev dirs)]
   ├── nontarget.npy
   └── target.npy
 ```
