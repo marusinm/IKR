@@ -22,7 +22,7 @@ Directory structure:
   │   ├── [evaluation data for clasification(could be mixed .png with wav)]
   ├── my_data
   │   ├── nontarget
-  │       ├── [coppied all nontarget wav files only (nontarget_train/dev dirs)]
+  │   │   ├── [coppied all nontarget wav files only (nontarget_train/dev dirs)]
   │   └── target
   │       ├── [coppied all target wav files only (target_train/dev dirs)]
   ├── nontarget.npy
