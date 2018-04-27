@@ -24,7 +24,7 @@ Directory structure:
   │   ├── nontarget
   │       ├── [coppied all nontarget wav files only (nontarget_train/dev dirs)]
   │   └── target
-  │       ├── [coppied all target wav files only (nontarget_train/dev dirs)]
+  │       ├── [coppied all target wav files only (target_train/dev dirs)]
   ├── nontarget.npy
   └── target.npy
 ```
