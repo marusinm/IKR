@@ -27,6 +27,7 @@ feature_dim_2 = 11
 # Output: Tuple (Label, Indices of the labels, one-hot encoded labels)
 def get_labels(path=TRAIN_DATA_PATH):
     labels = os.listdir(path)
+    labels.sort(reverse=True)
     label_indices = np.arange(0, len(labels))
     return labels, label_indices, to_categorical(label_indices)
 
@@ -94,8 +95,9 @@ def get_model():
     model.add(Dropout(0.25))
     model.add(Dense(64, activation='relu'))
     model.add(Dropout(0.4))
-#     model.add(Dense(num_classes, activation='softmax'))
+    # model.add(Dense(num_classes, activation='softmax'))
     model.add(Dense(num_classes, activation='sigmoid'))
+    # model.add(Dense(1, activation='sigmoid'))
     model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.Adadelta(),
                   metrics=['accuracy'])
@@ -128,7 +130,7 @@ def main():
     model.fit(X_train, y_train_hot, batch_size=batch_size, epochs=epochs, verbose=verbose, validation_data=(X_test, y_test_hot))
 
     # Output prediction
-    with open('output.txt', 'w') as f:
+    with open('audio_predictions.txt', 'w') as f:
         print('wait for output ....')
         files = os.listdir(EVAL_DATA_PATH)
         files.sort()
@@ -141,15 +143,28 @@ def main():
 
                 # Perform forward pass
                 predicted_class = np.argmax(model.predict(sample_reshaped))
-                predicted_probability = np.argmax(model.predict_proba(sample_reshaped))
-                # print(os.path.join(file[:-4]),
-                #     predicted_class,
-                #     predicted_probability,
-                #     file=f)
+                # predicted_class = model.predict(sample_reshaped)
+                predicted_probability = model.predict_proba(sample_reshaped)
+
+                #reverse class num. for output target must be 1 nontarget must be 0
+                reversed_class_output = predicted_class
+                if reversed_class_output == 1:
+                    reversed_class_output = 0
+                else:
+                    reversed_class_output = 1
+
                 print(os.path.join(file[:-4]),
-                    predicted_probability,
-                    predicted_class,"(",get_labels()[0][predicted_class],")",
+                    predicted_probability[0][predicted_class],
+                    reversed_class_output,
                     file=f)
+                # print(os.path.join(file[:-4]),
+                #     predicted_probability[0][predicted_class],
+                #     predicted_class,"(",get_labels()[0][predicted_class],")",
+                #     file=f)
+                # print(os.path.join(file[:-4]),
+                #     predicted_probability,
+                #     predicted_class,"(",get_labels()[0][np.argmax(predicted_class)],")",
+                #     file=f)
         print('done!')
         f.close()
 
