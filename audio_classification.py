@@ -128,16 +128,30 @@ def main():
     model.fit(X_train, y_train_hot, batch_size=batch_size, epochs=epochs, verbose=verbose, validation_data=(X_test, y_test_hot))
 
     # Output prediction
-    for file in os.listdir(EVAL_DATA_PATH):
-        if file.endswith(".wav"):
-            # Getting the MFCC
-            sample = wav2mfcc(os.path.join(EVAL_DATA_PATH, file))
-            # We need to reshape it remember?
-            sample_reshaped = sample.reshape(1, 20, 11, 1)
-            # Perform forward pass
-            print(os.path.join(file[:-4]),
-                  np.argmax(model.predict(sample_reshaped)),
-                  np.argmax(model.predict_proba(sample_reshaped)))
+    with open('output.txt', 'w') as f:
+        print('wait for output ....')
+        files = os.listdir(EVAL_DATA_PATH)
+        files.sort()
+        for file in files:
+            if file.endswith(".wav"):
+                # Getting the MFCC
+                sample = wav2mfcc(os.path.join(EVAL_DATA_PATH, file))
+                # We need to reshape it remember?
+                sample_reshaped = sample.reshape(1, 20, 11, 1)
+
+                # Perform forward pass
+                predicted_class = np.argmax(model.predict(sample_reshaped))
+                predicted_probability = np.argmax(model.predict_proba(sample_reshaped))
+                # print(os.path.join(file[:-4]),
+                #     predicted_class,
+                #     predicted_probability,
+                #     file=f)
+                print(os.path.join(file[:-4]),
+                    predicted_probability,
+                    predicted_class,"(",get_labels()[0][predicted_class],")",
+                    file=f)
+        print('done!')
+        f.close()
 
 
 
